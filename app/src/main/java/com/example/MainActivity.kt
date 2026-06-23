@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity() {
                     containerColor = Color(0xFFFDFBFF) // Clean, lightweight Professional Polish theme background
                 ) { innerPadding ->
                     PrivateBrowserContent(
-                        targetUrl = "https://mh.revayhystrix.com/ijPZe8Q0yTGkYg/143313",
+                        targetUrl = "https://ov.cabretpardao.com/itUi3X2SVstfs3g/143313",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -569,7 +569,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     MyApplicationTheme {
         Column {
-            PrivateBrowserContent(targetUrl = "https://mh.revayhystrix.com/ijPZe8Q0yTGkYg/143313")
+            PrivateBrowserContent(targetUrl = "https://ov.cabretpardao.com/itUi3X2SVstfs3g/143313")
         }
     }
 }
