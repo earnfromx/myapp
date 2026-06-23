@@ -2,10 +2,13 @@ package com.example
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.webkit.CookieManager
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebStorage
 import android.webkit.WebView
@@ -348,6 +351,16 @@ fun PrivateBrowserContent(
                             isSaveEnabled = false
 
                             webViewClient = object : WebViewClient() {
+                                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                                    val url = request?.url?.toString() ?: return false
+                                    return handleSchemeUrl(view?.context, url, view)
+                                }
+
+                                override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                                    if (url == null) return false
+                                    return handleSchemeUrl(view?.context, url, view)
+                                }
+
                                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                                     super.onPageStarted(view, url, favicon)
                                     isLoading = true
@@ -559,4 +572,69 @@ fun GreetingPreview() {
             PrivateBrowserContent(targetUrl = "https://mh.revayhystrix.com/ijPZe8Q0yTGkYg/143313")
         }
     }
+}
+
+fun handleSchemeUrl(context: Context?, url: String, webView: WebView?): Boolean {
+    if (context == null) return false
+
+    // Standard web navigation
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+        return false
+    }
+
+    // Handle intent:// schemes safely like Chrome does
+    if (url.startsWith("intent://")) {
+        try {
+            val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+            if (intent != null) {
+                intent.addCategory(Intent.CATEGORY_BROWSABLE)
+                intent.component = null
+                intent.selector?.let { selector ->
+                    selector.component = null
+                }
+                
+                // Try resolving/starting the activity
+                val packageManager = context.packageManager
+                if (intent.resolveActivity(packageManager) != null) {
+                    context.startActivity(intent)
+                    return true
+                } else {
+                    // Try processing fallback url extra parameter
+                    val fallbackUrl = intent.getStringExtra("browser_fallback_url")
+                    if (fallbackUrl != null && (fallbackUrl.startsWith("http://") || fallbackUrl.startsWith("https://"))) {
+                        webView?.loadUrl(fallbackUrl)
+                        return true
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Quick exception recovery: parse standard fallback directly from query string parameters
+            try {
+                if (url.contains("browser_fallback_url=")) {
+                    val startIndex = url.indexOf("browser_fallback_url=") + "browser_fallback_url=".length
+                    var endIndex = url.indexOf("&", startIndex)
+                    if (endIndex == -1) endIndex = url.length
+                    val fallbackDecoded = Uri.decode(url.substring(startIndex, endIndex))
+                    if (fallbackDecoded.startsWith("http://") || fallbackDecoded.startsWith("https://")) {
+                        webView?.loadUrl(fallbackDecoded)
+                        return true
+                    }
+                }
+            } catch (ex: Exception) {
+                // Ignore silent errors
+            }
+        }
+        return true // Consume to prevent unknown protocol errors in the web view frame
+    }
+
+    // Handle generic custom app schemes: tel:, mailto:, sms:, market:, whatsapp:, etc.
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context.startActivity(intent)
+        return true
+    } catch (e: Exception) {
+        // Safe fall-through if package doesn't exist
+    }
+
+    return true // Always consume to prevent default bad scheme crash/error screen
 }
