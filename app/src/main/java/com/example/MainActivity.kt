@@ -340,14 +340,17 @@ fun PrivateBrowserContent(
                             settings.apply {
                                 javaScriptEnabled = true
                                 domStorageEnabled = true
-                                databaseEnabled = false
+                                databaseEnabled = true
                                 cacheMode = WebSettings.LOAD_NO_CACHE
                                 saveFormData = false
                                 setSupportZoom(true)
                                 builtInZoomControls = true
                                 displayZoomControls = false
+                                userAgentString = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36"
+                                mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
                             }
 
+                            CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
                             isSaveEnabled = false
 
                             webViewClient = object : WebViewClient() {
