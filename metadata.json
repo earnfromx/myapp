@@ -1,0 +1,6 @@
+{
+  "name": "Private Web",
+  "description": "A secure, private single-URL browser that runs in an isolated incognito mode, ensuring zero cookies, history, or caching are retained across sessions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
