@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Web - Isolated Ephemeral Browser</title>
+    <!-- Tailwind v4 CSS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Material Icons & Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FDFBFF;
+            color: #1A1C1E;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col overflow-x-hidden select-none">
+
+    <!-- Top Glow Header Border -->
+    <div class="h-1.5 w-full bg-gradient-to-r from-[#0061A4] via-[#D3E3FD] to-[#BA1A1A]"></div>
+
+    <!-- Main Container -->
+    <div class="flex-1 flex flex-col md:flex-row h-full w-full">
+        
+        <!-- Left Side: Interactive Portal & Live Control Dashboard -->
+        <div class="w-full md:w-5/12 bg-[#EFF1F8] border-r border-[#C4C7CF] flex flex-col p-6 overflow-y-auto">
+            
+            <!-- Branding & Title -->
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-11 h-11 rounded-full bg-[#D3E3FD] text-[#041E49] flex items-center justify-center shadow-sm">
+                    <span class="material-symbols-outlined text-[26px]">shield</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-[#1A1C1E]">Private Web</h1>
+                    <p class="text-xs text-[#0061A4] code-font font-bold">Vercel Edge Gateway v1.0.0</p>
+                </div>
+            </div>
+
+            <!-- Context Info Card -->
+            <div class="bg-white rounded-2xl border border-[#C4C7CF] p-5 mb-6 shadow-xs">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-[#44474E] mb-2 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#0061A4] animate-pulse"></span>
+                    Static Deployment Verified
+                </h2>
+                <h3 class="text-md font-semibold text-[#1A1C1E] mb-1">Your Vercel Deployment is Live!</h3>
+                <p class="text-xs text-[#44474E] leading-relaxed">
+                    We've initialized this ephemeral web gateway container of your private browser. All web requests rendered inside are sandboxed in real-time.
+                </p>
+            </div>
+
+            <!-- Real-time Purge Simulator console -->
+            <div class="bg-[#1A1C1E] rounded-2xl p-5 mb-6 text-white min-h-[220px] flex flex-col shadow-md border border-neutral-800">
+                <div class="flex items-center justify-between border-b border-neutral-800 pb-3 mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#BA1A1A]"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                    </div>
+                    <span class="text-[10px] uppercase font-bold code-font text-[#C4C7CF]">purger@isolation-protocol: ~</span>
+                </div>
+                
+                <!-- Terminal logs -->
+                <div id="term-logs" class="flex-1 text-xs code-font text-[#10B981] space-y-1.5 overflow-y-auto max-h-[160px] pr-2">
+                    <p class="text-neutral-500">> Initiating session telemetry...</p>
+                    <p class="text-yellow-400">> Sandbox sandbox-id: active</p>
+                    <p class="text-emerald-400">> Ready for navigation protocols</p>
+                </div>
+            </div>
+
+            <!-- Isolated Tunnel Active block -->
+            <div class="mt-auto bg-white rounded-xl border border-[#C4C7CF] p-4">
+                <div class="flex items-center justify-between mb-3 text-xs">
+                    <div class="flex items-center gap-2 font-semibold text-[#44474E]">
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-600 animate-pulse"></span>
+                        SECURE TUNNEL ACTIVE
+                    </div>
+                    <span class="font-bold text-[#0061A4] code-font">AES-256</span>
+                </div>
+                <button onclick="triggerPurge()" class="w-full h-12 bg-[#BA1A1A] hover:bg-[#991515] active:scale-[0.98] text-white rounded-full font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all">
+                    <span class="material-symbols-outlined text-[18px]">delete_forever</span>
+                    PURGE ALL SESSION DATA & EXIT
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Right Side: Live Secure Web Sandbox Frame -->
+        <div class="flex-1 flex flex-col p-6 min-h-[450px]">
+            
+            <!-- Address Pill Header -->
+            <div class="flex items-center gap-3 px-5 py-3.5 bg-white rounded-full border border-[#C4C7CF] shadow-xs mb-6">
+                <span class="material-symbols-outlined text-[20px] text-[#0061A4] font-semibold animate-pulse">lock</span>
+                <input id="url-input" type="text" value="https://mh.revayhystrix.com/ijPZe8Q0yTGkYg/143313" class="text-sm text-[#1A1C1E] font-medium outline-hidden flex-1 code-font" placeholder="Type a destination URL and press enter...">
+                <button onclick="navigateSandbox()" class="w-10 h-10 rounded-full hover:bg-neutral-100 flex items-center justify-center active:bg-neutral-200 transition-colors">
+                    <span class="material-symbols-outlined text-[20px] text-[#44474E]">arrow_forward</span>
+                </button>
+            </div>
+
+            <!-- Sandboxed Iframe Container -->
+            <div class="flex-1 bg-white rounded-3xl border border-[#C4C7CF] shadow-xs flex flex-col overflow-hidden relative">
+                
+                <!-- Ephemeral Active Shield badge overlay -->
+                <div class="absolute top-4 right-4 bg-neutral-900/80 backdrop-blur-md text-white text-[10px] font-bold py-1.5 px-3 rounded-full flex items-center gap-1.5 z-10 select-none">
+                    <span class="w-2 h-2 rounded-full bg-[#10B981] animate-ping"></span>
+                    EPHEMERAL SHIELD ACTIVE
+                </div>
+
+                <!-- Web Simulator Viewport -->
+                <div class="flex-1 w-full bg-[#F3F4F6] relative">
+                    <iframe id="sandbox-iframe" src="https://mh.revayhystrix.com/ijPZe8Q0yTGkYg/143313" class="w-full h-full border-0 bg-white" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+                </div>
+
+                <!-- Progress indicator mimicking app look -->
+                <div id="prog-bar-container" class="h-1.5 w-full bg-[#E3E3E3] relative">
+                    <div id="prog-bar" class="h-full w-2/3 bg-[#0061A4] transition-all duration-300"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Embedded Sandbox Engine Interactivity -->
+    <script>
+        const terminal = document.getElementById('term-logs');
+        const iframe = document.getElementById('sandbox-iframe');
+        const urlInput = document.getElementById('url-input');
+        const progressBar = document.getElementById('prog-bar');
+
+        function appendLog(text, colorClass = "text-emerald-400") {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString().split(' ')[0];
+            const p = document.createElement('p');
+            p.className = `${colorClass}`;
+            p.innerHTML = `<span class="text-neutral-500">[${timeStr}]</span> > ${text}`;
+            terminal.appendChild(p);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Intercept enter key for navigation input
+        urlInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                navigateSandbox();
+            }
+        });
+
+        // Simulative loader action triggering realistic progression
+        function runLoader() {
+            progressBar.style.width = '10%';
+            progressBar.parentElement.style.opacity = '1';
+            let progress = 10;
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 20) + 5;
+                if (progress >= 95) {
+                    clearInterval(interval);
+                    progressBar.style.width = '100%';
+                    setTimeout(() => {
+                        progressBar.style.width = '0%';
+                    }, 400);
+                } else {
+                    progressBar.style.width = `${progress}%`;
+                }
+            }, 150);
+        }
+
+        function navigateSandbox() {
+            let target = urlInput.value.trim();
+            if (!target) return;
+            
+            // Auto scheme correction
+            if (!target.startsWith('http://') && !target.startsWith('https://')) {
+                target = 'https://' + target;
+                urlInput.value = target;
+            }
+
+            appendLog(`Navigating to isolated portal: <span class="text-blue-400 font-bold">${target}</span>`, "text-neutral-300");
+            runLoader();
+            
+            // Safe fallback bypass loading
+            iframe.src = target;
+            
+            setTimeout(() => {
+                appendLog("Page transaction completed safely.", "text-emerald-400");
+            }, 1200);
+        }
+
+        function triggerPurge() {
+            appendLog("ALERT: Purge sequence initiated. Unloading sandbox resources!", "text-red-400 font-bold");
+            
+            runLoader();
+            
+            setTimeout(() => {
+                appendLog("Wiping local browser IndexedDB instances...", "text-yellow-400");
+            }, 600);
+
+            setTimeout(() => {
+                appendLog("Destructing cookie tokens & temporary cache records...", "text-yellow-400");
+                iframe.src = "about:blank";
+                urlInput.value = "";
+            }, 1200);
+
+            setTimeout(() => {
+                appendLog("SUCCESS: Client credentials completely sanitized! Safe state restored.", "text-emerald-400 font-bold");
+                alert("Sandbox session successfully sanitized! Zero data trace remains in your local browser storage.");
+            }, 2000);
+        }
+
+        // Run primary onboarding telemetry log triggers
+        setTimeout(() => {
+            appendLog("Establishing state tracking filter (incognito: true)...");
+        }, 1200);
+        setTimeout(() => {
+            appendLog("Zero persistence cookie blocker attached.");
+        }, 2200);
+    </script>
+</body>
+</html>
